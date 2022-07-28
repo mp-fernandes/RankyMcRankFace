@@ -21,7 +21,7 @@ import ciir.umass.edu.utilities.Sorter;
 public class RankList {
 
 	protected DataPoint[] rl = null;
-	
+
 	public RankList(List<DataPoint> rl)
 	{
 		this.rl = new DataPoint[rl.size()];
@@ -70,13 +70,5 @@ public class RankList {
 		int[] idx = Sorter.sort(score, false); 
 		return new RankList(this, idx);
 	}
-	
-	public RankList getRanking(short fid)
-	{
-		double[] score = new double[rl.length];
-		for(int i=0;i<rl.length;i++)
-			score[i] = rl[i].getFeatureValue(fid);
-		int[] idx = Sorter.sort(score, false);
-		return new RankList(this, idx);
-	}
+	public double getQueryImportance() { return get(0).getQueryImportance(); }
 }

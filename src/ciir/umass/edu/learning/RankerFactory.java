@@ -86,14 +86,7 @@ public class RankerFactory {
 		}
 		return r;
 	}
-	public Ranker createRanker(String className, List<RankList> samples, int[] features, MetricScorer scorer)
-	{
-		Ranker r = createRanker(className);
-		r.setTrainingSet(samples);
-		r.setFeatures(features);
-		r.setMetricScorer(scorer);
-		return r;
-	}
+
 	public Ranker loadRankerFromFile(String modelFile)
 	{
     return loadRankerFromString(FileUtils.read(modelFile, "ASCII"));

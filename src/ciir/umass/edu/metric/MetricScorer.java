@@ -10,6 +10,7 @@
 package ciir.umass.edu.metric;
 
 import ciir.umass.edu.learning.RankList;
+import ciir.umass.edu.utilities.SimpleMath;
 
 import java.util.List;
 
@@ -47,9 +48,14 @@ public abstract class MetricScorer {
 	public double score(List<RankList> rl)
 	{
 		double score = 0.0;
-		for(int i=0;i<rl.size();i++)
-			score += score(rl.get(i));
-		return score/rl.size();
+		double denominator = 0;
+		for(int i=0;i<rl.size();i++) {
+			RankList x = rl.get(i);
+			denominator += x.getQueryImportance();
+			score += score(x)*x.getQueryImportance();
+		}
+
+		return score/denominator;
 	}
 	
 	protected int[] getRelevanceLabels(RankList rl)

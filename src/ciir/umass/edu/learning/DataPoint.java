@@ -38,7 +38,10 @@ public abstract class DataPoint {
 	
 	//internal to learning procedures
 	protected double cached = -1.0;//the latest evaluation score of the learned model on this data point
-	
+
+	//internal to learning procedures
+	protected float queryImportance = 1.0F;//the latest evaluation score of the learned model on this data point
+
 	protected static boolean isUnknown(float fVal)
 	{
 		return Float.isNaN(fVal);
@@ -77,9 +80,11 @@ public abstract class DataPoint {
 				System.exit(1);
 			}
 			id = getValue(fs[1]);
+
 			String key = "";
 			String val = "";
-			for(int i=2;i<fs.length;i++)
+			queryImportance = Float.parseFloat(getValue(fs[2]));
+			for(int i=3;i<fs.length;i++)
 			{
 				knownFeatures++;
 				key = getKey(fs[i]);
@@ -202,9 +207,11 @@ public abstract class DataPoint {
 		output += " " + description;
 		return output;
 	}
-	
+
+	public double getQueryImportance() { return this.queryImportance; }
+
 	public static int getFeatureCount()
 	{
 		return featureCount;
-	}	
+	}
 }
