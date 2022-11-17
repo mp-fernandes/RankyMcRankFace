@@ -822,21 +822,6 @@ public class Evaluator {
 		}
 	}
 
-
-	/**
-	 * Evaluate the currently selected ranking algorithm using <data, defined features> with k-fold cross validation.
-	 * @param sampleFile
-	 * @param featureDefFile
-	 * @param nFold
-	 * @param modelDir
-	 * @param modelFile
-	 */
-	public void evaluate(String sampleFile, String featureDefFile, int nFold, String modelDir, String modelFile)
-	{
-		evaluate(sampleFile, featureDefFile, nFold, -1, modelDir, modelFile);
-	}
-
-
 	/**
 	 * Evaluate the currently selected ranking algorithm using <data, defined features> with k-fold cross validation.
 	 * @param sampleFile
@@ -938,22 +923,14 @@ public class Evaluator {
 	public void test(String testFile, String prpFile)
 	{
 		List<RankList> test = readInput(testFile);
-		double rankScore = 0.0;
+		double rankScore = testScorer.score(test);;
 		List<String> ids = new ArrayList<>();
 		List<Double> scores = new ArrayList<>();
-		for (RankList l : test) {
-			double score = testScorer.score(l);
-			ids.add(l.getID());
-			scores.add(score);
-			rankScore += score;
-		}
-		rankScore /= test.size();
-		ids.add("all");
 		scores.add(rankScore);		
 		System.out.println(testScorer.name() + " on test data: " + SimpleMath.round(rankScore, 4));
 
 		//if(prpFile.compareTo("") != 0)
-                if (!prpFile.isEmpty())
+		if (!prpFile.isEmpty())
 		{
 			savePerRankListPerformanceFile(ids, scores, prpFile);
 			System.out.println("Per-ranked list performance saved to: " + prpFile);
@@ -974,18 +951,10 @@ public class Evaluator {
 		List<RankList> test = readInput(testFile);
 		if(normalize)
 			normalize(test, features);
-		
-		double rankScore = 0.0;
+
+		double rankScore = testScorer.score(test);
 		List<String> ids = new ArrayList<>();
 		List<Double> scores = new ArrayList<>();
-		for (RankList aTest : test) {
-			RankList l = ranker.rank(aTest);
-			double score = testScorer.score(l);
-			ids.add(l.getID());
-			scores.add(score);
-			rankScore += score;
-		}
-		rankScore /= test.size();
 		ids.add("all");
 		scores.add(rankScore);		
 		System.out.println(testScorer.name() + " on test data: " + SimpleMath.round(rankScore, 4));
